@@ -152,28 +152,34 @@ li{margin:0 0 .35rem}
 <!-- ================= PAGE 1: BRIEF ================= -->
 <section class="page" id="p-brief">
   <div class="tabs" role="tablist">
-    <label class="tab" for="r-t-msg">Note to professor</label>
+    <label class="tab" for="r-t-msg">Need and solution</label>
     <label class="tab" for="r-t-pitch">The idea in one screen</label>
   </div>
 
   <div class="tabpanel" id="t-msg">
-    <h2><span class="rail g1">│</span>Note to professor</h2>
-    <p class="desc">A short message to send as-is or adapt.</p>
-    <div class="letter">
-      <p>Hi Professor,</p>
-      <p>The byui-browser teams don't share a definition of "done". To fix that, I built a small
-      public test site: <a href="https://willpatbarr.github.io/byui-browser-ladder/">willpatbarr.github.io/byui-browser-ladder</a>.</p>
-      <p>It is a ladder of eight levels (L0–L7). Each level adds one capability: plain text, then
-      HTML, CSS, external resources, forms and navigation, JavaScript, network calls, and finally
-      real websites. A team points the browser at a level's page. If the feature works, the
-      page shows a big SUCCESS. From L2 up, the page shows FAIL by default, and only the feature
-      under test can switch it to SUCCESS, so a browser that's missing the feature can't pass by
-      accident.</p>
-      <p>The browser is complete when every level passes. That gives each team a concrete target
-      they can check themselves. The rest of this page explains how it works and what I'd like to
-      add next. I'd love your thoughts.</p>
-      <p>Thanks,<br>William</p>
-    </div>
+    <h2><span class="rail g1">│</span>Need</h2>
+    <p>The byui-browser project is built by several student teams working in parallel. There is
+    no shared, objective definition of when the browser, or any one feature, is "done".</p>
+    <div class="tw"><table>
+      <tr><th>Gap</th><th>Effect</th></tr>
+      <tr><td>No agreed finish line per feature</td><td>Teams judge their own completeness, and those judgements don't line up</td></tr>
+      <tr><td>No common test target</td><td>Integration problems surface late, when teams' pieces first meet</td></tr>
+      <tr><td>Heavy test suites (such as WPT) need a working JavaScript engine</td><td>An early-stage browser can't be measured at all</td></tr>
+    </table></div>
+
+    <h2><span class="rail g1">│</span>Solution</h2>
+    <p>A public website of test pages, the Ladder, organised into eight levels of increasing
+    complexity (L0–L7). Each level adds exactly one capability. A team opens a level's URL in
+    the browser: a large SUCCESS means the level passes.</p>
+    <div class="tw"><table>
+      <tr><th>Requirement</th><th>How the Ladder meets it</th></tr>
+      <tr><td>Objective pass/fail</td><td>From L2 up, pages show FAIL by default; only the feature under test can reveal SUCCESS</td></tr>
+      <tr><td>Usable from day one</td><td>L0 and L1 need nothing beyond text and basic HTML</td></tr>
+      <tr><td>Zero setup</td><td>Static pages on GitHub Pages; no harness, server or install</td></tr>
+      <tr><td>Clear next step</td><td>The first failing level names the next feature to build</td></tr>
+      <tr><td>Defined finish line</td><td>The browser is complete when every level passes</td></tr>
+    </table></div>
+    <p>Live at <a href="https://willpatbarr.github.io/byui-browser-ladder/">willpatbarr.github.io/byui-browser-ladder</a>.</p>
   </div>
 
   <div class="tabpanel" id="t-pitch">
