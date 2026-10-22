@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ladder Test Site</title>
+<style>
+:root{color-scheme:dark;
+--bg:#14171a;--card:#1d2126;--ink:#e8eaed;--muted:#a4acb5;--faint:#737c86;
+--border:#2b3138;--border-strong:#3a424b;--accent:#6cc394;--accent-soft:#1c3128;
+--warn:#e0a458;--warn-soft:#33280f;
+--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.35);--radius:14px;
+--g1:#1C8E9C;--g2:#B06A1E;--g3:#5A8C33;--ok:#2E8B62;--bad:#C24A4A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,
+"Segoe UI",Roboto,sans-serif}
+code,a{overflow-wrap:anywhere}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;background:var(--card);
+  padding:1px 5px;border-radius:4px;border:1px solid var(--border)}
+a{color:var(--accent)}
+main{max-width:74rem;margin-inline:auto;padding:4.5rem clamp(16px,4vw,40px) 5rem}
+h1{font-size:clamp(26px,5.4vw,38px);margin:0;color:var(--accent);font-weight:600;letter-spacing:-.015em}
+h1::after{content:"";display:block;width:3.2rem;height:3px;background:var(--accent);border-radius:2px;
+  margin-top:.85rem}
+h2{font-size:1.3rem;margin:0 0 .9rem}
+h3{font-size:1.08rem;margin:1.6rem 0 .5rem}
+.head{display:grid;grid-template-columns:minmax(14rem,22rem) 1fr;gap:0 2.6rem;align-items:start;
+  margin:0 0 1.6rem}
+.head .lede{margin:.35rem 0 0;color:var(--muted)}
+@media (max-width:900px){.head{grid-template-columns:1fr}.head .lede{margin-top:1.1rem}}
+p{margin:0 0 1rem;max-width:68ch}
+.g1{color:var(--g1)}.g2{color:var(--g2)}.g3{color:var(--g3)}
+.rail{font-weight:700;margin-right:.35rem}
+.ok{color:var(--ok);font-weight:700}.bad{color:var(--bad);font-weight:700}
+
+/* CSS-only pages and tabs */
+.st{position:absolute;width:0;height:0;opacity:0;pointer-events:none}
+.page{display:none}.tabpanel{display:none}
+#r-p-brief:checked ~ main #p-brief,#r-p-how:checked ~ main #p-how,
+#r-p-next:checked ~ main #p-next{display:block}
+#r-p-brief:checked ~ .skipto label[for="r-p-brief"],#r-p-how:checked ~ .skipto label[for="r-p-how"],
+#r-p-next:checked ~ .skipto label[for="r-p-next"]{background:var(--bg);color:var(--accent)}
+#r-t-msg:checked ~ main #t-msg,#r-t-pitch:checked ~ main #t-pitch,
+#r-t-ladder:checked ~ main #t-ladder,#r-t-rule:checked ~ main #t-rule,
+#r-t-levels:checked ~ main #t-levels,#r-t-limits:checked ~ main #t-limits,
+#r-t-verify:checked ~ main #t-verify,#r-t-future:checked ~ main #t-future,
+#r-t-alt:checked ~ main #t-alt,#r-t-links:checked ~ main #t-links{display:block}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 24px;background:var(--card);
+  border-radius:10px 10px 0 0;padding:4px 6px 0;border-bottom:2px solid var(--border-strong)}
+.tab{background:none;border:0;border-bottom:2px solid transparent;color:var(--muted);font-size:13.5px;
+  padding:9px 12px;cursor:pointer;border-radius:8px 8px 0 0;transition:.15s;margin-bottom:-2px}
+.tab:hover{color:var(--ink)}
+#r-t-msg:checked ~ main label[for="r-t-msg"],#r-t-pitch:checked ~ main label[for="r-t-pitch"]{
+  color:var(--g1);border-bottom-color:var(--g1);font-weight:600}
+#r-t-ladder:checked ~ main label[for="r-t-ladder"],#r-t-rule:checked ~ main label[for="r-t-rule"],
+#r-t-levels:checked ~ main label[for="r-t-levels"],#r-t-limits:checked ~ main label[for="r-t-limits"],
+#r-t-verify:checked ~ main label[for="r-t-verify"]{color:var(--g2);border-bottom-color:var(--g2);
+  font-weight:600}
+#r-t-future:checked ~ main label[for="r-t-future"],#r-t-alt:checked ~ main label[for="r-t-alt"],
+#r-t-links:checked ~ main label[for="r-t-links"]{color:var(--g3);border-bottom-color:var(--g3);
+  font-weight:600}
+
+/* floating nav */
+.skipto{position:fixed;top:50%;left:18px;transform:translateY(-50%);z-index:60;display:flex;
+  flex-direction:column;gap:5px;background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:12px 12px 13px;box-shadow:var(--shadow);width:172px}
+.skipto label{text-decoration:none;color:var(--muted);font-size:13px;padding:6px 10px;
+  border-radius:8px;transition:.15s;cursor:pointer}
+.skipto label:hover{background:var(--bg);color:var(--accent)}
+.navlabel{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);
+  padding:0 10px 4px}
+.skipto-toggle{display:none;align-items:center;justify-content:center;width:40px;height:40px;
+  padding:0 !important;color:var(--muted)}
+.skipto-toggle svg{transition:.15s}
+.skipto-menu{display:flex;flex-direction:column;gap:5px}
+@media (max-width:1580px){
+  main{padding-top:72px}
+  .skipto{top:10px;left:10px;transform:none;width:auto;padding:5px;border-radius:12px}
+  .skipto-toggle{display:flex}
+  .skipto-menu{display:none;padding:4px 6px 8px;min-width:172px}
+  .skipto:hover .skipto-menu,.skipto:focus-within .skipto-menu,
+  #navtoggle:checked ~ .skipto .skipto-menu{display:flex}
+  #navtoggle:checked ~ .skipto .skipto-toggle svg{transform:rotate(180deg)}
+}
+
+/* tables, cards, callouts, code */
+.tw{overflow-x:auto;margin:0 0 1.2rem}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase}
+.letter{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:22px 26px;box-shadow:var(--shadow);max-width:46rem}
+.letter p{max-width:none}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:14px;
+  margin:0 0 1.2rem}
+.card{background:var(--card);border:1px solid var(--border-strong);border-radius:12px;padding:14px 16px}
+.card h3{margin:0 0 .35rem}
+.card p{margin:0;font-size:14.5px;color:var(--muted)}
+.note{border:1px solid var(--warn);background:var(--warn-soft);border-radius:10px;padding:13px 17px;
+  margin:0 0 1.2rem;max-width:68ch}
+.note b{display:block;color:var(--warn);font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  margin:0 0 5px}
+.code{position:relative;margin:0 0 16px}
+.code pre{margin:0}
+pre{overflow-x:auto;max-width:100%;background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:14px 16px;font:13.5px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace}
+.code .lang{position:absolute;top:7px;right:10px;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;font-weight:700;color:var(--faint);background:var(--card);padding:1px 4px;
+  border-radius:3px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.kw{color:#A25494}.ty{color:#4368A8}.str{color:#2E8B62}
+.desc{color:var(--muted);font-size:14px;margin:0 0 .4rem}
+ol,ul{margin:0 0 1rem;padding-left:1.4rem}
+li{margin:0 0 .35rem}
+@media (max-width:720px){.letter{padding:16px}.card{padding:14px}}
+</style>
+</head>
+<body>
+<input class="st" type="radio" name="pg" id="r-p-brief" checked>
+<input class="st" type="radio" name="pg" id="r-p-how">
+<input class="st" type="radio" name="pg" id="r-p-next">
+<input class="st" type="checkbox" id="navtoggle">
+<input class="st" type="radio" name="tb1" id="r-t-msg" checked>
+<input class="st" type="radio" name="tb1" id="r-t-pitch">
+<input class="st" type="radio" name="tb2" id="r-t-ladder" checked>
+<input class="st" type="radio" name="tb2" id="r-t-rule">
+<input class="st" type="radio" name="tb2" id="r-t-levels">
+<input class="st" type="radio" name="tb2" id="r-t-limits">
+<input class="st" type="radio" name="tb2" id="r-t-verify">
+<input class="st" type="radio" name="tb3" id="r-t-future" checked>
+<input class="st" type="radio" name="tb3" id="r-t-alt">
+<input class="st" type="radio" name="tb3" id="r-t-links">
+
+<nav class="skipto" aria-label="Pages">
+  <label class="skipto-toggle" for="navtoggle" aria-label="Page menu"><svg width="18" height="18"
+    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+    stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></label>
+  <div class="skipto-menu">
+    <div class="navlabel">Pages</div>
+    <label for="r-p-brief">Brief</label>
+    <label for="r-p-how">How it works</label>
+    <label for="r-p-next">What comes next</label>
+  </div>
+</nav>
+
+<main>
+<div class="head">
+  <h1>Ladder Test Site</h1>
+  <p class="lede">A public site of byui-browser test pages, one per complexity level. A level is
+  done when the browser shows a big SUCCESS on that level's page.</p>
+</div>
+
+<!-- ================= PAGE 1: BRIEF ================= -->
+<section class="page" id="p-brief">
+  <div class="tabs" role="tablist">
+    <label class="tab" for="r-t-msg">Note to professor</label>
+    <label class="tab" for="r-t-pitch">The idea in one screen</label>
+  </div>
+
+  <div class="tabpanel" id="t-msg">
+    <h2><span class="rail g1">│</span>Note to professor</h2>
+    <p class="desc">A short message to send as-is or adapt.</p>
+    <div class="letter">
+      <p>Hi Professor,</p>
+      <p>The byui-browser teams don't share a definition of "done". To fix that, I built a small
+      public test site: <a href="https://willpatbarr.github.io/byui-browser-ladder/">willpatbarr.github.io/byui-browser-ladder</a>.</p>
+      <p>It is a ladder of eight levels (L0–L7). Each level adds one capability: plain text, then
+      HTML, CSS, external resources, forms and navigation, JavaScript, network calls, and finally
+      real websites. A team points the browser at a level's page. If the feature works, the
+      page shows a big SUCCESS. From L2 up, the page shows FAIL by default, and only the feature
+      under test can switch it to SUCCESS, so a browser that's missing the feature can't pass by
+      accident.</p>
+      <p>The browser is complete when every level passes. That gives each team a concrete target
+      they can check themselves. The rest of this page explains how it works and what I'd like to
+      add next. I'd love your thoughts.</p>
+      <p>Thanks,<br>William</p>
+    </div>
+  </div>
+
+  <div class="tabpanel" id="t-pitch">
+    <h2><span class="rail g1">│</span>The idea in one screen</h2>
+    <div class="cards">
+      <div class="card"><h3>Problem</h3><p>Teams have no shared definition of when a browser
+        feature is "done".</p></div>
+      <div class="card"><h3>Mechanism</h3><p>One web page per level. The page tests a single
+        feature and shows SUCCESS only if that feature works.</p></div>
+      <div class="card"><h3>Pass</h3><p>A big SUCCESS on the page. No tools, logs or test
+        harness needed: just open the URL.</p></div>
+      <div class="card"><h3>Done</h3><p>The browser is complete when L0 through L7 all
+        pass.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PAGE 2: HOW IT WORKS ================= -->
+<section class="page" id="p-how">
+  <div class="tabs" role="tablist">
+    <label class="tab" for="r-t-ladder">The ladder</label>
+    <label class="tab" for="r-t-rule">Success rule</label>
+    <label class="tab" for="r-t-levels">How each level reveals SUCCESS</label>
+    <label class="tab" for="r-t-limits">Constraints</label>
+    <label class="tab" for="r-t-verify">Verification</label>
+  </div>
+
+  <div class="tabpanel" id="t-ladder">
+    <h2><span class="rail g2">│</span>The ladder</h2>
+    <p>Each level adds exactly one capability on top of the level before it, so the first level
+    that fails shows which feature to work on next.</p>
+    <div class="tw"><table>
+      <tr><th>Level</th><th>Tests</th><th>Page</th></tr>
+      <tr><td>L0</td><td>Plain text, no tags</td><td><a href="https://willpatbarr.github.io/byui-browser-ladder/l0/">/l0/</a></td></tr>
+      <tr><td>L1</td><td>Static HTML with default styling: headings, paragraphs, lists, links</td><td><a href="https://willpatbarr.github.io/byui-browser-ladder/l1/">/l1/</a></td></tr>
+      <tr><td>L2</td><td>Inline CSS and <code>&lt;style&gt;</code> blocks</td><td><a href="https://willpatbarr.github.io/byui-browser-ladder/l2/">/l2/</a></td></tr>
+      <tr><td>L3</td><td>External resources: linked stylesheet, image, web font</td><td><a href="https://willpatbarr.github.io/byui-browser-ladder/l3/">/l3/</a></td></tr>
+      <tr><td>L4</td><td>Interaction: link navigation, form submit, back/forward</td><td><a href="https://willpatbarr.github.io/byui-browser-ladder/l4/">/l4/</a></td></tr>
+      <tr><td>L5</td><td>JavaScript that changes the DOM</td><td><a href="https://willpatbarr.github.io/byui-browser-ladder/l5/">/l5/</a></td></tr>
+      <tr><td>L6</td><td>Network and timers: <code>fetch</code>, <code>setTimeout</code></td><td><a href="https://willpatbarr.github.io/byui-browser-ladder/l6/">/l6/</a></td></tr>
+      <tr><td>L7</td><td>Real-world sites, linked out</td><td><a href="https://willpatbarr.github.io/byui-browser-ladder/l7/">/l7/</a></td></tr>
+    </table></div>
+    <p>The root page is L1-level HTML only, with no CSS or JavaScript, so any browser that
+    passes L1 can use it to reach every level.</p>
+  </div>
+
+  <div class="tabpanel" id="t-rule">
+    <h2><span class="rail g2">│</span>Success rule</h2>
+    <p>A page may use only its own level's feature to show SUCCESS. Pages from L2 up start out
+    showing FAIL, and the feature under test is the only thing that can hide it.</p>
+    <div class="tw"><table>
+      <tr><th>Browser state</th><th>L0–L1 shows</th><th>L2+ shows</th></tr>
+      <tr><td>Feature works</td><td class="ok">SUCCESS</td><td class="ok">SUCCESS</td></tr>
+      <tr><td>Feature missing</td><td>nothing readable (page fails to render)</td><td class="bad">FAIL</td></tr>
+      <tr><td>Feature half-works</td><td>partly readable</td><td class="bad">FAIL</td></tr>
+    </table></div>
+    <div class="note"><b>Remember</b>The rule's one guarantee: a browser without the feature
+    sees FAIL, never a false SUCCESS. Each page also says in plain text what it tests and what
+    a pass looks like.</div>
+  </div>
+
+  <div class="tabpanel" id="t-levels">
+    <h2><span class="rail g2">│</span>How each level reveals SUCCESS</h2>
+    <div class="tw"><table>
+      <tr><th>Level</th><th>Default</th><th>What switches it to SUCCESS</th></tr>
+      <tr><td>L0</td><td class="ok">SUCCESS</td><td>The page is just the word, as plain text</td></tr>
+      <tr><td>L1</td><td class="ok">SUCCESS</td><td>An <code>&lt;h1&gt;</code>; passes if it renders</td></tr>
+      <tr><td>L2</td><td class="bad">FAIL</td><td>A <code>&lt;style&gt;</code> rule hides FAIL; <code>::before</code> writes SUCCESS</td></tr>
+      <tr><td>L3</td><td class="bad">FAIL</td><td>The same trick, but only in the linked <code>style.css</code>; the image also spells SUCCESS</td></tr>
+      <tr><td>L4</td><td class="bad">FAIL</td><td>Following the link or submitting the form lands on a SUCCESS page</td></tr>
+      <tr><td>L5</td><td class="bad">FAIL</td><td>A script replaces the heading text</td></tr>
+      <tr><td>L6</td><td class="bad">FAIL</td><td>One heading filled from a fetched <code>result.json</code>, one from a timer</td></tr>
+      <tr><td>L7</td><td>none</td><td>Checked by hand: each linked site loads and its links work</td></tr>
+    </table></div>
+    <h3>Example: the L2 mechanism</h3>
+    <p class="desc">CSS hides FAIL and writes SUCCESS; with no CSS, FAIL stays</p>
+    <div class="code"><span class="lang">html</span><pre><span class="kw">&lt;style&gt;</span>
+.<span class="ty">fail</span> { display: none; }
+.<span class="ty">result</span>::before { content: <span class="str">"SUCCESS"</span>; }
+<span class="kw">&lt;/style&gt;</span>
+...
+<span class="kw">&lt;h1</span> class=<span class="str">"result"</span><span class="kw">&gt;&lt;span</span> class=<span class="str">"fail"</span><span class="kw">&gt;</span>FAIL<span class="kw">&lt;/span&gt;&lt;/h1&gt;</span></pre></div>
+  </div>
+
+  <div class="tabpanel" id="t-limits">
+    <h2><span class="rail g2">│</span>Constraints</h2>
+    <p>Plain static pages can't check everything. Where a page can't prove a pass by itself,
+    it tells the tester what to look for.</p>
+    <div class="cards">
+      <div class="card"><h3>L3 web font</h3><p>No CSS-only way to show FAIL when a font doesn't
+        load. The page says what the font should look like (a curly script).</p></div>
+      <div class="card"><h3>L4 back/forward</h3><p>History can't be checked without
+        JavaScript, which belongs to L5. The tester presses Back and Forward and checks where they
+        land.</p></div>
+      <div class="card"><h3>L7 real sites</h3><p>There's no automatic SUCCESS on real sites.
+        Passing is a judgement call.</p></div>
+      <div class="card"><h3>L0 file type</h3><p>GitHub Pages serves L0 as HTML, so the page
+        contains no tags and reads the same either way.</p></div>
+    </div>
+    <div class="note"><b>Observation</b>Hosting is static only: no build step, no backend.
+    Anything that needs a server, such as recording which teams passed, is future work.</div>
+  </div>
+
+  <div class="tabpanel" id="t-verify">
+    <h2><span class="rail g2">│</span>Verification</h2>
+    <p>Every page was checked in Chrome both ways: with the feature working, and with the
+    feature removed.</p>
+    <div class="tw"><table>
+      <tr><th>Level</th><th>Feature on</th><th>Feature off</th><th>How it was turned off</th></tr>
+      <tr><td>L2</td><td class="ok">SUCCESS</td><td class="bad">FAIL</td><td>All styles removed</td></tr>
+      <tr><td>L3</td><td class="ok">SUCCESS</td><td class="bad">FAIL</td><td>Linked stylesheet removed</td></tr>
+      <tr><td>L4</td><td class="ok">SUCCESS</td><td class="bad">FAIL</td><td>Start page compared with the page the link leads to</td></tr>
+      <tr><td>L5</td><td class="ok">SUCCESS</td><td class="bad">FAIL</td><td>Scripts blocked</td></tr>
+      <tr><td>L6</td><td class="ok">SUCCESS</td><td class="bad">FAIL</td><td>Scripts blocked</td></tr>
+    </table></div>
+    <div class="note"><b>Observation</b>The first version of L3 failed this check: a browser with
+    no CSS would have shown both FAIL and SUCCESS. Now the word SUCCESS only exists in the
+    external stylesheet. Firefox has not been tested yet.</div>
+  </div>
+</section>
+
+<!-- ================= PAGE 3: NEXT ================= -->
+<section class="page" id="p-next">
+  <div class="tabs" role="tablist">
+    <label class="tab" for="r-t-future">Future work</label>
+    <label class="tab" for="r-t-alt">Alternatives considered</label>
+    <label class="tab" for="r-t-links">Links</label>
+  </div>
+
+  <div class="tabpanel" id="t-future">
+    <h2><span class="rail g3">│</span>Future work</h2>
+    <p>The first version keeps the rule minimal on purpose. Planned additions:</p>
+    <ol>
+      <li>A separate pass/fail line for each check within a level, not one verdict per page</li>
+      <li><code>console.log</code> success output, once the browser has developer tools</li>
+      <li>Pass reports sent to a server or dashboard, so passes are recorded</li>
+      <li>Email sign-up for updates (items 3 and 4 both need a backend)</li>
+      <li>More levels as the browser grows, such as layout, accessibility and media</li>
+    </ol>
+  </div>
+
+  <div class="tabpanel" id="t-alt">
+    <h2><span class="rail g3">│</span>Alternatives considered</h2>
+    <div class="tw"><table>
+      <tr><th>Option</th><th>Upside</th><th>Downside</th></tr>
+      <tr><td>Ladder site (chosen)</td><td>Anyone checks a level by opening a URL; no setup</td><td>Some checks are by eye; one verdict per page</td></tr>
+      <tr><td>Web Platform Tests subset</td><td>Industry standard, very thorough</td><td>Needs a test harness and JavaScript, so it can't judge the early levels</td></tr>
+      <tr><td>Pages inside the browser repo</td><td>Versioned with the code</td><td>Not a public URL; teams have to run a local server</td></tr>
+    </table></div>
+  </div>
+
+  <div class="tabpanel" id="t-links">
+    <h2><span class="rail g3">│</span>Links</h2>
+    <ul>
+      <li>Live site: <a href="https://willpatbarr.github.io/byui-browser-ladder/">willpatbarr.github.io/byui-browser-ladder</a></li>
+      <li>Source: <a href="https://github.com/Willpatbarr/byui-browser-ladder">github.com/Willpatbarr/byui-browser-ladder</a></li>
+      <li>Original brief: <code>byui-browser/docs/testing/handoff-ladder-site.md</code></li>
+    </ul>
+  </div>
+</section>
+</main>
+</body>
+</html>
