@@ -1,0 +1,3 @@
+@font-face { font-family: "LadderFont"; src: url("ladder-font.woff2") format("woff2"); }
+.fail { display: none; }
+.success { display: block !important; font-family: "LadderFont", serif; }
