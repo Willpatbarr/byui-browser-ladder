@@ -1,16 +1,30 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><title>byui-browser ladder</title></head>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>byui-browser ladder</title>
+<link rel="stylesheet" href="assets/home.css?v=1">
+</head>
 <body>
-<h1>byui-browser ladder tests</h1>
-<p>Open each level in the browser. A level passes when it shows a large SUCCESS. L2 and up show FAIL by default.</p>
-<ol start="0">
-<li><a href="l0/">L0: plain text</a></li>
-<li><a href="l1/">L1: static HTML</a></li>
-<li><a href="l2/">L2: inline and style-tag CSS</a></li>
-<li><a href="l3/">L3: external stylesheet, image, web font</a></li>
-<li><a href="l4/">L4: links, forms, back/forward</a></li>
-<li><a href="l5/">L5: JavaScript DOM changes</a></li>
-<li><a href="l6/">L6: fetch and timers</a></li>
-<li><a href="l7/">L7: real-world sites</a></li>
+<header>
+<p class="kicker">byui-browser</p>
+<h1>The Ladder</h1>
+<p class="lede">Eight test pages, one per complexity level. Open a level in the browser: a big SUCCESS means it passes. The browser is complete when every level passes.</p>
+</header>
+<main>
+<ol class="levels" start="0">
+<li><a href="l0/"><span class="num">L0</span> <strong>Plain text</strong> <span class="what">No tags at all. If it renders, it passes.</span></a></li>
+<li><a href="l1/"><span class="num">L1</span> <strong>Static HTML</strong> <span class="what">Headings, paragraphs, lists and links with default styling.</span></a></li>
+<li><a href="l2/"><span class="num">L2</span> <strong>CSS</strong> <span class="what">Inline styles and a style block reveal SUCCESS.</span></a></li>
+<li><a href="l3/"><span class="num">L3</span> <strong>External resources</strong> <span class="what">Linked stylesheet, image and web font.</span></a></li>
+<li><a href="l4/"><span class="num">L4</span> <strong>Interaction</strong> <span class="what">Links, form submit, back and forward.</span></a></li>
+<li><a href="l5/"><span class="num">L5</span> <strong>JavaScript</strong> <span class="what">A script changes the page.</span></a></li>
+<li><a href="l6/"><span class="num">L6</span> <strong>Network and timers</strong> <span class="what">fetch and setTimeout.</span></a></li>
+<li><a href="l7/"><span class="num">L7</span> <strong>Real-world sites</strong> <span class="what">Actual websites, checked by hand.</span></a></li>
 </ol>
+<section class="rule">
+<h2>How a level passes</h2>
+<p>From L2 up, every page shows FAIL by default. Only the feature under test can swap it for SUCCESS, so a browser missing that feature never passes by accident.</p>
+</section>
+</main>
+<footer><p><a href="https://github.com/Willpatbarr/byui-browser-ladder">Source on GitHub</a></p></footer>
 </body></html>
