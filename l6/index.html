@@ -1,13 +1,17 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><title>L6</title></head>
+<html><head><meta charset="utf-8"><title>L6</title>
+<link rel="stylesheet" href="../assets/ladder.css?v=1"></head>
 <body>
+<main>
+<p class="level">Level L6</p>
 <h1 id="fetch">FAIL</h1>
 <h1 id="timer">FAIL</h1>
-<p>L6 tests network and timers. Pass: both headings read SUCCESS. The first comes from a fetched JSON file, the second from a setTimeout callback after one second. Any FAIL left means that part failed.</p>
+<p class="note">L6 tests network and timers. Pass: both headings read SUCCESS. The first comes from a fetched JSON file, the second from a setTimeout callback after one second. Any FAIL left means that part failed.</p>
 <p><a href="../">Back to all levels</a></p>
 <script>
 fetch("result.json").then(function (r) { return r.json(); })
-  .then(function (d) { document.getElementById("fetch").textContent = d.result + " (fetch)"; });
-setTimeout(function () { document.getElementById("timer").textContent = "SUCCESS (timer)"; }, 1000);
+  .then(function (d) { document.getElementById("fetch").textContent = d.result + " (fetch)"; document.getElementById("fetch").className = "pass"; });
+setTimeout(function () { document.getElementById("timer").textContent = "SUCCESS (timer)"; document.getElementById("timer").className = "pass"; }, 1000);
 </script>
+</main>
 </body></html>

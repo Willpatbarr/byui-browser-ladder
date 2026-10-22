@@ -1,3 +1,4 @@
+@import url("../assets/ladder.css");
 @font-face { font-family: "LadderFont"; src: url("ladder-font.woff2") format("woff2"); }
 .fail { display: none; }
 .result { font-family: "LadderFont", serif; }

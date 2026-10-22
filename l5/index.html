@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><title>L5</title></head>
+<html><head><meta charset="utf-8"><title>L5</title>
+<link rel="stylesheet" href="../assets/ladder.css?v=1"></head>
 <body>
+<main>
+<p class="level">Level L5</p>
 <h1 id="result">FAIL</h1>
-<p>L5 tests JavaScript changing the DOM. Pass: a script replaces FAIL with SUCCESS. With JavaScript off you see FAIL.</p>
+<p class="note">L5 tests JavaScript changing the DOM. Pass: a script replaces FAIL with SUCCESS. With JavaScript off you see FAIL.</p>
 <p><a href="../">Back to all levels</a></p>
-<script>document.getElementById("result").textContent = "SUCCESS";</script>
+<script>document.getElementById("result").textContent = "SUCCESS"; document.getElementById("result").className = "pass";</script>
+</main>
 </body></html>
