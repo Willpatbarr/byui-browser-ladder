@@ -8,6 +8,7 @@ main { max-width:44rem; margin:3rem auto; padding:2rem 2.2rem; background:var(--
 .level { font-size:.8rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:0 0 .4rem; }
 h1 { font-size:4rem; line-height:1.1; margin:0 0 1.2rem; color:var(--bad); }
 h1.pass, .result { color:var(--ok); }
+h1.title { color:var(--ink); font-size:2.4rem; }
 .result .fail { color:var(--bad); }
 p, li { color:var(--ink); }
 .note { color:var(--muted); border-top:1px solid var(--line); padding-top:1rem; }
