@@ -19,7 +19,7 @@ Static test pages for [byui-browser](https://github.com/byui-browser), one per c
 - L2+ show FAIL by default. Only the feature under test hides FAIL and reveals SUCCESS, so a browser without the feature shows FAIL, never a false SUCCESS.
 - Each page has a short note on what it tests and what a pass looks like.
 
-Known limits: the L3 web font and L4 back/forward are checked by eye (the page says what to look for). L0 is served as `.html` by GitHub Pages, so it contains no tags.
+Known limits: the L3 font face (Lobster), L2 purely visual properties (rounded corners, shadow) and L4 back/forward are checked by eye (the page says what to look for). L0 is served as `.html` by GitHub Pages, so it contains no tags.
 
 ## Future work
 

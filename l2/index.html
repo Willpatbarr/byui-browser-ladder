@@ -2,21 +2,56 @@
 <html><head><meta charset="utf-8"><title>L2</title>
 <style>
 body { margin:0; background:#f4f6f8; color:#1d2329; font:17px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
-main { max-width:44rem; margin:3rem auto; padding:2rem 2.2rem; background:#fff; border:1px solid #dde3e8; border-radius:14px; box-shadow:0 4px 18px rgba(0,0,0,.06); }
+main { max-width:44rem; margin:3rem auto; padding:2rem 2.2rem; background:#fff; border:1px solid #dde3e8; border-radius:14px; box-shadow:0 4px 18px rgba(0,0,0,.06); overflow:hidden; }
 .level { font-size:.8rem; letter-spacing:.12em; text-transform:uppercase; color:#5b6670; margin:0 0 .4rem; }
 h1 { font-size:4rem; line-height:1.1; margin:0 0 1.2rem; color:#1a7f37; }
 .note { color:#5b6670; border-top:1px solid #dde3e8; padding-top:1rem; }
+.note code { background:#f4f6f8; padding:0 .25em; border-radius:4px; }
 a { color:#0b62c4; }
 @media (max-width:600px){ main { margin:0; border-radius:0; padding:1.4rem 1rem; } h1 { font-size:3rem; } }
-.fail { display: none; }
+
+/* ---- Gated checks. Every "FAIL: x" marker in the heading is visible by
+   default and is hidden ONLY by the CSS feature it names. Any marker left
+   on screen means that feature is broken. ---- */
 .result::before { content: "SUCCESS"; }
+.checks { font-size: 1.6rem; font-weight: bold; line-height: 1.3; margin: -.8rem 0 1rem; position: relative; }
+.result > :first-child { display: none; }                 /* :first-child + child combinator */
+.m-display { display: none; }                             /* display:none + class selector */
+#m-id { display: none; }                                  /* id selector */
+h1 .m-desc { display: none; }                             /* descendant combinator */
+[data-check="attr"] { display: none; }                    /* attribute selector */
+span.m-type { display: none; }                            /* type + class compound */
+h1 .m-spec { display: none; }                             /* specificity: (0,1,1) beats... */
+.m-spec { display: inline; }                              /* ...(0,1,0) even though later */
+.m-order { display: inline; }                             /* source order: later rule wins */
+.m-order { display: none; }
+.m-imp { display: none !important; }                      /* !important beats an id rule */
+#m-imp { display: inline; }
+.m-a, .m-group { display: none; }                         /* selector list */
+/* a comment containing } { .m-cmt { display: inline } */
+.m-cmt { display: none; }                                 /* comment parsing */
+.m-recover { colr: red; display: none; }                  /* skip unknown property, keep going */
+.m-color { color: #fff; }                                 /* color (white on white) */
+.m-rgb { color: rgb(255, 255, 255); }                     /* rgb() colour syntax */
+.m-inherit-wrap { color: #fff; }                          /* inheritance of color */
+.m-fs { font-size: 0; }                                   /* font-size */
+.m-width { display: inline-block; width: 0; overflow: hidden; white-space: nowrap; vertical-align: top; } /* width + overflow */
+.m-height { display: block; height: 0; overflow: hidden; } /* height + overflow */
+.m-pos { position: absolute; left: -9999px; }             /* position:absolute + left */
+.m-margin { display: block; height: 0; margin-left: -9999px; } /* negative margin */
+.m-vis { visibility: hidden; }                            /* visibility */
+.m-opacity { opacity: 0; }                                /* opacity */
+.m-em { display: inline-block; width: 0em; height: 0em; overflow: hidden; vertical-align: top; } /* em units */
+@media (min-width: 1px) { .m-media { display: none; } }   /* @media that matches */
+@media print { .result::before { content: "FAIL: @media print applied on screen"; } } /* must NOT match */
 </style></head>
 <body>
 <main>
 <p class="level">Level L2</p>
-<h1 class="result"><span class="fail">FAIL</span></h1>
-<p style="color: green" class="result-inline"><span style="display:none">FAIL: inline style ignored. </span>Inline style check: this line is green.</p>
-<p class="note">L2 tests a &lt;style&gt; block and inline style attributes. Pass: big SUCCESS heading and no FAIL text anywhere. Without CSS you see FAIL.</p>
+<h1 class="result"><span>FAIL: :first-child </span><span class="m-display">FAIL: display:none </span><span id="m-id">FAIL: #id selector </span><span class="m-desc">FAIL: descendant selector </span><span data-check="attr">FAIL: [attr] selector </span><span class="m-type">FAIL: type.class selector </span><span class="m-spec">FAIL: specificity </span><span class="m-order">FAIL: source order </span><span class="m-imp" id="m-imp">FAIL: !important </span><span class="m-group">FAIL: selector list </span><span class="m-cmt">FAIL: comments </span><span class="m-recover">FAIL: error recovery </span><span class="m-fs">FAIL: font-size </span><span class="m-media">FAIL: @media </span><span style="display:none">FAIL: inline style </span></h1>
+<p class="checks"><span class="m-color">FAIL: color </span><span class="m-rgb">FAIL: rgb() </span><span class="m-inherit-wrap"><span>FAIL: inheritance </span></span><span class="m-width">FAIL: width/overflow </span><span class="m-height">FAIL: height/overflow </span><span class="m-pos">FAIL: position </span><span class="m-margin">FAIL: margin </span><span class="m-vis">FAIL: visibility </span><span class="m-opacity">FAIL: opacity </span><span class="m-em">FAIL: em units </span></p>
+<p class="note">L2 tests a &lt;style&gt; block and inline <code>style</code> attributes. Each <code>FAIL: …</code> marker in the heading is hidden only by the CSS feature it names (selectors, cascade, specificity, <code>!important</code>, colour, inheritance, sizing, overflow, positioning, margins, visibility, opacity, units, <code>@media</code>, <code>::before</code>, inline styles). Pass: the heading reads exactly SUCCESS and no FAIL markers appear under it (the blank band under the heading holds the invisible markers). Any marker left names the broken feature.</p>
+<p class="note">Checked by eye (CSS cannot hide text with these): this card is white (background-color) with rounded corners, a thin grey border and a soft shadow, centred on a light grey page; the "LEVEL L2" label is small, spaced-out capitals; SUCCESS is large and green.</p>
 <p><a href="../">Back to all levels</a></p>
 </main>
 </body></html>

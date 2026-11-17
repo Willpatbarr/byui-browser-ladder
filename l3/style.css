@@ -1,5 +1,8 @@
-@import url("../assets/ladder.css");
+@import url("../assets/ladder.css?v=3");
 @font-face { font-family: "LadderFont"; src: url("ladder-font.woff2") format("woff2"); }
+/* Every glyph in LadderBlank is empty, so text set in it vanishes only if the font file really loads. */
+@font-face { font-family: "LadderBlank"; src: url("blank.woff2?v=2") format("woff2"); font-display: block; }
 .fail { display: none; }
 .result { font-family: "LadderFont", serif; }
 .result::before { content: "SUCCESS"; }
+.m-font { font-family: "LadderBlank", serif; }
